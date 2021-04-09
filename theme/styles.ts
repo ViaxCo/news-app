@@ -10,6 +10,18 @@ const styles = {
     "html,body": {
       minWidth: "fit-content",
     },
+    // Hide image while lazyloading to show skeleton
+    ".lazyloading": {
+      display: "none",
+    },
+    // Show image once lazyloaded
+    ".lazyloaded": {
+      display: "block",
+    },
+    // Hide skeleton
+    ".lazyloaded ~ div": {
+      display: "none",
+    },
   },
 };
 
