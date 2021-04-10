@@ -1,10 +1,10 @@
 import { Button } from "@chakra-ui/button";
 import { Flex, Heading, HStack, Text } from "@chakra-ui/layout";
 import { chakra } from "@chakra-ui/system";
+import { motion } from "framer-motion";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import Articles from "../components/Articles";
-import Container from "../components/Container";
 import news, { ArticleType } from "../mobx/NewsStore";
 
 // Custom span component with chakra props
@@ -16,7 +16,9 @@ const Home = observer(() => {
   const totalPages = Math.ceil(news.articles.length / articleCardsPerPage);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [currentArticles, setCurrentArticles] = useState<ArticleType[]>([]);
+  const [currentArticles, setCurrentArticles] = useState<ArticleType[]>(
+    news.articles.length === 0 ? [] : news.articles.slice(0, 20)
+  );
 
   useEffect(() => {
     // Fetch news if array is empty (i.e on reload/first load)
@@ -31,7 +33,17 @@ const Home = observer(() => {
   }, [currentPage, news.articles.length]);
 
   return (
-    <Container>
+    <motion.div
+      style={{ display: "flex", flexDirection: "column", flex: 1 }}
+      variants={{
+        initial: { opacity: 1 },
+        animate: { opacity: 1 },
+        exit: { opacity: 0 },
+      }}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+    >
       <Flex borderBottom="2px solid black" align="center" justify="space-between">
         <Heading ml="2" fontSize={["2xl", "3xl"]} fontWeight="semibold">
           Articles
@@ -68,7 +80,7 @@ const Home = observer(() => {
           &gt;
         </Button>
       </HStack>
-    </Container>
+    </motion.div>
   );
 });
 

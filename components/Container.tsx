@@ -5,11 +5,12 @@ import Header from "./Header";
 
 type Props = {
   children: ReactNode;
+  overflow: string;
 };
 
-const Container = ({ children }: Props) => {
+const Container = ({ children, overflow }: Props) => {
   return (
-    <Flex direction="column" minH="100vh" justify="space-between">
+    <Flex direction="column" minH="100vh" justify="space-between" overflow={overflow}>
       <Header />
       <Flex direction="column" p={["2", "4"]} mt="20">
         {children}
