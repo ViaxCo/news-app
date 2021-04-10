@@ -2,7 +2,7 @@ import { Flex, Heading, HStack } from "@chakra-ui/layout";
 
 const ArticleNotFound = () => {
   return (
-    <Flex align="center" justify="center">
+    <Flex align="center" justify="center" mt="50%">
       <HStack spacing="4">
         <Heading
           as="h2"

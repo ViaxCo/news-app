@@ -43,6 +43,7 @@ const AddComment = observer(({ slug }: Props) => {
           _placeholder={{ color: "#777" }}
           maxLength={140}
           resize="none"
+          required
         />
       </Flex>
       <Button alignSelf="flex-end" type="submit" colorScheme="blue" isLoading={loading}>
