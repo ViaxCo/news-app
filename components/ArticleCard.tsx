@@ -2,6 +2,7 @@ import { Image } from "@chakra-ui/image";
 import { Box, Flex, LinkBox, LinkOverlay, Text } from "@chakra-ui/layout";
 import { Skeleton } from "@chakra-ui/skeleton";
 import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { motion } from "framer-motion";
 import NextLink from "next/link";
@@ -14,6 +15,7 @@ type Props = {
 };
 
 dayjs.extend(relativeTime);
+dayjs.extend(customParseFormat);
 
 const ArticleCard = ({ article }: Props) => {
   return (

@@ -4,6 +4,7 @@ import { Box, Flex, Heading, Link, Text } from "@chakra-ui/layout";
 import { Skeleton } from "@chakra-ui/skeleton";
 import { chakra } from "@chakra-ui/system";
 import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 import { motion } from "framer-motion";
 import { observer } from "mobx-react-lite";
 import Head from "next/head";
@@ -38,6 +39,8 @@ const pageVariants = {
 
 // Custom span component with chakra props
 const Span = chakra("span");
+
+dayjs.extend(customParseFormat);
 
 const ArticlePage = observer(() => {
   const { query } = useRouter();
