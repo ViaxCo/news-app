@@ -20,10 +20,10 @@ describe("Home", () => {
   });
   it("renders without crashing", () => {
     render(<Home />);
-    const h1 = document.querySelector("h1");
+    const h2 = document.querySelector("h2");
     const articles = document.querySelectorAll("article");
-    expect(h1).toBeInTheDocument();
-    expect(h1?.textContent).toBe("News App");
+    expect(h2).toBeInTheDocument();
+    expect(h2?.textContent).toBe("Articles");
     expect(articles.length).toBe(20);
   });
 });
