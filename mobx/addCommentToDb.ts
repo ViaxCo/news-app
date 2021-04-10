@@ -1,10 +1,11 @@
-import firebase from "../utils/firebase";
+import { getFirebaseClient } from "../utils/firebase";
 import { ArticleType } from "./NewsStore";
 
-const firestore = firebase.firestore();
-const articlesRef = firestore.collection("articles");
-
 const addCommentToDb = async (article: ArticleType, comment: string, slug: string) => {
+  const firebase = await getFirebaseClient();
+  const firestore = firebase.firestore();
+  const articlesRef = firestore.collection("articles");
+
   // Add new comment to the database
   await articlesRef.doc(slug).set({
     ...article,

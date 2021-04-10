@@ -1,12 +1,13 @@
 import axios from "axios";
 import kebabCase from "lodash/kebabCase";
-import firebase from "../utils/firebase";
+import { getFirebaseClient } from "../utils/firebase";
 import { ArticleType } from "./NewsStore";
 
-const firestore = firebase.firestore();
-const articlesRef = firestore.collection("articles");
-
 const fetchNewsAndSaveToDB = async () => {
+  const firebase = await getFirebaseClient();
+  const firestore = firebase.firestore();
+  const articlesRef = firestore.collection("articles");
+
   // Fetch news from Nigeria
   const res = await axios.get(
     `https://api.currentsapi.services/v1/search?apiKey=${process.env.NEXT_PUBLIC_API_KEY}&country=NG`
