@@ -21,16 +21,15 @@ const fetchNewsAndSaveToDB = async () => {
     filteredNews.forEach(async article => {
       const slug = kebabCase(article.title);
       try {
-        // Check if the article already exists in the db
-        const doc = await articlesRef.doc(slug).get();
-        // If it doesn't, save it
-        if (!doc.exists) {
-          await articlesRef.doc(slug).set({
+        // Create if it doesn't exist, and if it exists, only replace the "id" field (to avoid overwriting comments with empty array)
+        await articlesRef.doc(slug).set(
+          {
             ...article,
             id: slug,
             comments: [],
-          });
-        }
+          },
+          { mergeFields: ["id"] }
+        );
       } catch (error) {
         console.log(error);
       }
@@ -39,7 +38,7 @@ const fetchNewsAndSaveToDB = async () => {
     console.log(error);
   }
 
-  // Fetch all the articles from db and save to state
+  // Fetch all the articles from db
   const querySnapshot = await articlesRef.orderBy("published", "desc").get();
   return querySnapshot;
 };

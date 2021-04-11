@@ -14,7 +14,7 @@ const addCommentToDb = async (article: ArticleType, comment: string, slug: strin
       ...article.comments,
     ],
   });
-  // Fetch updates articles and save to state
+  // Fetch updated articles
   const querySnapshot = await articlesRef.orderBy("published", "desc").get();
   return querySnapshot;
 };
