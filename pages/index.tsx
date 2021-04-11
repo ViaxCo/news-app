@@ -1,14 +1,10 @@
-import { Button } from "@chakra-ui/button";
-import { Flex, Heading, HStack, Text } from "@chakra-ui/layout";
-import { chakra } from "@chakra-ui/system";
+import { Flex, Heading, Text } from "@chakra-ui/layout";
 import { motion } from "framer-motion";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import Articles from "../components/Articles";
+import Pagination from "../components/Pagination";
 import { useStore } from "../mobx/StoreProvider";
-
-// Custom span component with chakra props
-const Span = chakra("span");
 
 const Home = observer(() => {
   const news = useStore();
@@ -51,33 +47,11 @@ const Home = observer(() => {
         </Text>
       </Flex>
       <Articles articles={currentArticles} />
-      {/* Pagination */}
-      <HStack alignSelf="center" mt="6" spacing="6">
-        <Button
-          size="sm"
-          fontWeight="bold"
-          fontSize="lg"
-          onClick={() => setCurrentPage(prev => prev - 1)}
-          colorScheme="blue"
-          disabled={currentPage === 1}
-        >
-          &lt;
-        </Button>
-        <Text>
-          Page <Span fontWeight="semibold">{currentPage}</Span> of{" "}
-          <Span fontWeight="semibold">{totalPages ? totalPages : 1}</Span>
-        </Text>
-        <Button
-          size="sm"
-          fontWeight="bold"
-          fontSize="lg"
-          colorScheme="blue"
-          onClick={() => setCurrentPage(prev => prev + 1)}
-          disabled={currentPage === totalPages}
-        >
-          &gt;
-        </Button>
-      </HStack>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        setCurrentPage={setCurrentPage}
+      />
     </motion.div>
   );
 });
