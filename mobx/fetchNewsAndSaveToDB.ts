@@ -10,7 +10,7 @@ const fetchNewsAndSaveToDB = async () => {
 
   // Fetch news from Nigeria
   const res = await axios.get(
-    `https://api.currentsapi.services/v1/search?apiKey=${process.env.NEXT_PUBLIC_API_KEY}&country=NG`
+    `https://api.currentsapi.services/v1/search?apiKey=${process.env.API_KEY}&country=NG`
   );
   const news = res.data.news as ArticleType[];
   // Filter out articles with no image and long titles
