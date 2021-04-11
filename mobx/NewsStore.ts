@@ -30,10 +30,9 @@ class News {
   }
   fetchArticles = async () => {
     try {
-      const news = await fetchNewsAndSaveToDB();
-      runInAction(() =>
-        news.forEach(article => this.articles.push(article.data() as ArticleType))
-      );
+      const newsSnapshot = await fetchNewsAndSaveToDB();
+      const articles = newsSnapshot.docs.map(doc => doc.data());
+      runInAction(() => (this.articles = articles as ArticleType[]));
     } catch (error) {
       console.log(error);
     }
@@ -43,17 +42,9 @@ class News {
     const article = articles.find(article => article.id === slug);
     if (!article) return;
     try {
-      const news = await addCommentToDb(article, comment, slug);
-      runInAction(() =>
-        news.forEach(item => {
-          const article = item.data() as ArticleType;
-          if (article.id === slug) {
-            this.articles = articles.map(a =>
-              a.id === slug ? { ...a, comments: article.comments } : a
-            );
-          }
-        })
-      );
+      const newsSnapshot = await addCommentToDb(article, comment, slug);
+      const articles = newsSnapshot.docs.map(doc => doc.data());
+      runInAction(() => (this.articles = articles as ArticleType[]));
     } catch (error) {
       console.log(error);
     }
