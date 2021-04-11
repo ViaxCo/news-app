@@ -118,6 +118,7 @@ const ArticlePage = observer(() => {
             <Box w="100%" h="auto" mt="4" pb="4" borderBottom="1px solid black">
               <Image
                 data-src={article.image}
+                alt={article.image.split("/").pop()}
                 w="100%"
                 h="100%"
                 objectFit="contain"
