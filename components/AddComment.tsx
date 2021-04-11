@@ -24,10 +24,13 @@ const AddComment = observer(({ slug }: Props) => {
     if (!slug) return;
     setLoading(true);
     e.preventDefault();
-    try {
-      await news.addComment(value, slug);
-    } catch (error) {
-      console.log(error);
+    const text = value.trim();
+    if (text) {
+      try {
+        await news.addComment(text, slug);
+      } catch (error) {
+        console.log(error);
+      }
     }
     setLoading(false);
     setValue("");
