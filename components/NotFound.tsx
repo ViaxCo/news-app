@@ -1,8 +1,12 @@
 import { Flex, Heading, HStack } from "@chakra-ui/layout";
 
-const ArticleNotFound = () => {
+type Props = {
+  param: string;
+};
+
+const NotFound = ({ param }: Props) => {
   return (
-    <Flex align="center" justify="center" mt="50%">
+    <Flex my="auto" align="center" justify="center">
       <HStack spacing="4">
         <Heading
           as="h2"
@@ -15,11 +19,11 @@ const ArticleNotFound = () => {
           404
         </Heading>
         <Heading as="h3" fontSize="md" fontWeight="normal">
-          This article could not be found
+          This {param} could not be found
         </Heading>
       </HStack>
     </Flex>
   );
 };
 
-export default ArticleNotFound;
+export default NotFound;

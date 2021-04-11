@@ -1,6 +1,9 @@
 import { action, makeObservable, observable, runInAction } from "mobx";
+import { enableStaticRendering } from "mobx-react-lite";
 import addCommentToDb from "./addCommentToDb";
-import fetchNewsAndSaveToDB from "./fetchNewsAndSaveToDB";
+import { FetchedData } from "./StoreProvider";
+// there is no window object on the server
+enableStaticRendering(typeof window === "undefined");
 
 export type CommentType = {
   text: string;
@@ -18,25 +21,16 @@ export type ArticleType = {
   comments: CommentType[];
 };
 
-class News {
+export class NewsStore {
   articles: ArticleType[] = [];
 
   constructor() {
     makeObservable(this, {
       articles: observable,
-      fetchArticles: action,
       addComment: action,
+      hydrate: action,
     });
   }
-  fetchArticles = async () => {
-    try {
-      const newsSnapshot = await fetchNewsAndSaveToDB();
-      const articles = newsSnapshot.docs.map(doc => doc.data());
-      runInAction(() => (this.articles = articles as ArticleType[]));
-    } catch (error) {
-      console.log(error);
-    }
-  };
   addComment = async (comment: string, slug: string) => {
     const articles = this.articles;
     const article = articles.find(article => article.id === slug);
@@ -49,6 +43,10 @@ class News {
       console.log(error);
     }
   };
+  hydrate = (fetchedData: FetchedData) => {
+    if (!fetchedData) return;
+    this.articles = fetchedData.articles ?? [];
+  };
 }
-const news = new News();
-export default news;
+const news = new NewsStore();
+export type NewsType = typeof news;

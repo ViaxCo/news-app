@@ -5,24 +5,22 @@ import { motion } from "framer-motion";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import Articles from "../components/Articles";
-import news, { ArticleType } from "../mobx/NewsStore";
+import { useStore } from "../mobx/StoreProvider";
 
 // Custom span component with chakra props
 const Span = chakra("span");
 
 const Home = observer(() => {
+  const news = useStore();
+
   // Pagination details
   const articleCardsPerPage = 20;
   const totalPages = Math.ceil(news.articles.length / articleCardsPerPage);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [currentArticles, setCurrentArticles] = useState<ArticleType[]>(
-    news.articles.length === 0 ? [] : news.articles.slice(0, 20)
-  );
+  const [currentArticles, setCurrentArticles] = useState(news.articles.slice(0, 20));
 
   useEffect(() => {
-    // Fetch news if array is empty (i.e on reload/first load)
-    if (news.articles.length === 0) news.fetchArticles();
     // Pagination details
     const indexOfLastArticleCard = currentPage * articleCardsPerPage;
     const indexOfFirstArticleCard = indexOfLastArticleCard - articleCardsPerPage;

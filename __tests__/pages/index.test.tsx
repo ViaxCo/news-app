@@ -1,5 +1,22 @@
 import { render } from "@testing-library/react";
+import { nanoid } from "nanoid";
+import { StoreProvider } from "../../mobx/StoreProvider";
 import Home from "../../pages/index";
+
+const mockArticle = {
+  id: "string",
+  title: "string",
+  description: "string",
+  url: "string",
+  author: "string",
+  image: "string",
+  published: "string",
+  comments: [],
+};
+
+const mockArticles = Array(20)
+  .fill("")
+  .map(item => ({ ...mockArticle, id: nanoid(32) }));
 
 describe("Home", () => {
   beforeAll(() => {
@@ -19,7 +36,11 @@ describe("Home", () => {
     window.scrollTo = jest.fn();
   });
   it("renders without crashing", () => {
-    render(<Home />);
+    render(
+      <StoreProvider fetchedData={{ articles: mockArticles }}>
+        <Home />
+      </StoreProvider>
+    );
     const h2 = document.querySelector("h2");
     const articles = document.querySelectorAll("article");
     expect(h2).toBeInTheDocument();

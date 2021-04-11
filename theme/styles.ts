@@ -12,11 +12,12 @@ const styles = {
     },
     // Hide image while lazyloading to show skeleton
     ".lazyloading": {
-      display: "none",
+      opacity: 0,
     },
     // Show image once lazyloaded
     ".lazyloaded": {
-      display: "block",
+      opacity: 1,
+      transition: "opacity .5s",
     },
     // Hide skeleton
     ".lazyloaded ~ div": {

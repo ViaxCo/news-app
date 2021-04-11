@@ -10,9 +10,9 @@ type Props = {
 
 const Container = ({ children, overflow }: Props) => {
   return (
-    <Flex direction="column" minH="100vh" justify="space-between" overflow={overflow}>
+    <Flex direction="column" minH="100vh" overflow={overflow}>
       <Header />
-      <Flex direction="column" p={["2", "4"]} mt="20">
+      <Flex flex="1" direction="column" p={["2", "4"]} mt="20">
         {children}
       </Flex>
       <Footer />

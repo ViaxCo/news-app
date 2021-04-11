@@ -8,6 +8,8 @@ import { GoogleFonts } from "next-google-fonts";
 import { AppProps } from "next/app";
 import Head from "next/head";
 import Container from "../components/Container";
+import fetchNewsAndSaveToDB from "../mobx/fetchNewsAndSaveToDB";
+import { newsStore, StoreProvider } from "../mobx/StoreProvider";
 import theme from "../theme";
 
 const MyApp = ({ Component, pageProps, router }: AppProps) => {
@@ -23,12 +25,24 @@ const MyApp = ({ Component, pageProps, router }: AppProps) => {
       <ChakraProvider theme={theme}>
         <Container overflow="hidden">
           <AnimatePresence initial={false} exitBeforeEnter>
-            <Component {...pageProps} key={router.route} />
+            <StoreProvider fetchedData={pageProps.fetchedData}>
+              <Component {...pageProps} key={router.route} />
+            </StoreProvider>
           </AnimatePresence>
         </Container>
       </ChakraProvider>
     </>
   );
+};
+
+MyApp.getInitialProps = async () => {
+  // If called on the client
+  if (typeof window !== "undefined")
+    return { pageProps: { fetchedData: { articles: newsStore.articles } } };
+
+  const newsSnapshot = await fetchNewsAndSaveToDB();
+  const articles = newsSnapshot.docs.map(doc => doc.data());
+  return { pageProps: { fetchedData: { articles } } };
 };
 
 export default MyApp;

@@ -5,17 +5,20 @@ import { chakra } from "@chakra-ui/system";
 import { Textarea } from "@chakra-ui/textarea";
 import { observer } from "mobx-react-lite";
 import { FormEvent, useState } from "react";
-import news from "../mobx/NewsStore";
+import { useStore } from "../mobx/StoreProvider";
 
 type Props = {
   slug: string | undefined;
 };
 
+// Custom Form component with chakra props
 const Form = chakra("form");
 
 const AddComment = observer(({ slug }: Props) => {
   const [value, setValue] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const news = useStore();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     if (!slug) return;
