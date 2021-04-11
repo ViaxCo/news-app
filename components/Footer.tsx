@@ -17,7 +17,7 @@ const Footer = () => {
         href="https://www.viaxco.com"
         target="_blank"
         rel="noopener noreferrer"
-        color="blue.500"
+        color="blue.600"
         mx="1.5"
       >
         ViaxCo.
