@@ -1,3 +1,13 @@
+jest.mock("next/router", () => ({
+  useRouter() {
+    return {
+      route: "/",
+      pathname: "/",
+      query: "",
+      asPath: "",
+    };
+  },
+}));
 import { render } from "@testing-library/react";
 import { nanoid } from "nanoid";
 import { StoreProvider } from "../../mobx/StoreProvider";
