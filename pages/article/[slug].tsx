@@ -136,7 +136,6 @@ const ArticlePage = observer(() => {
                 data-src={article.image}
                 alt={article.image.split("/").pop()}
                 w="100%"
-                h="100%"
                 objectFit="contain"
                 className="lazyload"
                 zIndex="1"
