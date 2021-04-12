@@ -1,3 +1,4 @@
+import Filter from "bad-words";
 import { getFirebaseClient } from "../utils/firebase";
 
 const addCommentToDb = async (comment: string, slug: string) => {
@@ -7,10 +8,12 @@ const addCommentToDb = async (comment: string, slug: string) => {
   try {
     const snapshot = await db.ref("comments").get();
     const comments = snapshot.val();
+    const filter = new Filter();
+    const cleanedComment = filter.clean(comment);
     await db.ref("comments").set([
       {
         articleId: slug,
-        text: comment,
+        text: cleanedComment,
         createdAt: firebase.database.ServerValue.TIMESTAMP as number,
       },
       ...comments,
