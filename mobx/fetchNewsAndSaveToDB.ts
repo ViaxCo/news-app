@@ -39,7 +39,7 @@ const fetchNewsAndSaveToDB = async () => {
     console.log(error);
   }
 
-  // Fetch all the articles from db and save to state
+  // Fetch all the articles from db
   const querySnapshot = await articlesRef.orderBy("published", "desc").get();
   return querySnapshot;
 };
