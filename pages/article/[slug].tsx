@@ -115,12 +115,19 @@ const ArticlePage = observer(() => {
 
             <MotionBox
               w="100%"
-              minH="300px"
               h="auto"
               mt="4"
               pb="4"
               borderBottom="1px solid black"
-              position="relative"
+              display="grid"
+              gridTemplate="1fr / 1fr"
+              placeItems="center"
+              sx={{
+                "& > *": {
+                  gridColumn: "1 / 1",
+                  gridRow: "1 / 1",
+                },
+              }}
               // animation
               initial={{ opacity: 0 }}
               animate={{ opacity: 1, transition: { duration: 0.5 } }}
@@ -132,15 +139,9 @@ const ArticlePage = observer(() => {
                 h="100%"
                 objectFit="contain"
                 className="lazyload"
+                zIndex="1"
               />
-              <Skeleton
-                height="100%"
-                width="100%"
-                position="absolute"
-                top="0"
-                left="0"
-                zIndex="docked"
-              />
+              <Skeleton height="300px" width="100%" zIndex="2" />
             </MotionBox>
 
             <Text
