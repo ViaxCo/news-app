@@ -8,11 +8,11 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 import { HTMLMotionProps, motion } from "framer-motion";
 import { observer } from "mobx-react-lite";
 import Head from "next/head";
-import NextLink from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { BsArrowLeftShort as ArrowBackIcon } from "react-icons/bs";
 import AddComment from "../../components/AddComment";
+import { MotionBox } from "../../components/ArticleCard";
 import Comments from "../../components/Comments";
 import NotFound from "../../components/NotFound";
 import { useStore } from "../../mobx/StoreProvider";
@@ -46,8 +46,8 @@ const MotionFlex: React.FC<MotionFlexProps> = motion(Flex);
 dayjs.extend(customParseFormat);
 
 const ArticlePage = observer(() => {
-  const { query } = useRouter();
-  const { slug } = query;
+  const router = useRouter();
+  const { slug } = router.query;
 
   const news = useStore();
   const article = news.articles.find(article => article.id === slug);
@@ -76,18 +76,16 @@ const ArticlePage = observer(() => {
         exit="exit"
       >
         {/* Back button */}
-        <NextLink href="/" passHref>
-          <Link _hover={{ textDecoration: "none" }}>
-            <Button
-              leftIcon={<ArrowBackIcon size="24" />}
-              colorScheme="blue"
-              variant="ghost"
-              pl="2"
-            >
-              Go Back
-            </Button>
-          </Link>
-        </NextLink>
+        <Button
+          alignSelf="flex-start"
+          leftIcon={<ArrowBackIcon size="24" />}
+          colorScheme="blue"
+          variant="ghost"
+          pl="2"
+          onClick={() => router.back()}
+        >
+          Go Back
+        </Button>
 
         {article ? (
           <>
@@ -115,7 +113,18 @@ const ArticlePage = observer(() => {
               )}
             </Box>
 
-            <Box w="100%" h="auto" mt="4" pb="4" borderBottom="1px solid black">
+            <MotionBox
+              w="100%"
+              minH="300px"
+              h="auto"
+              mt="4"
+              pb="4"
+              borderBottom="1px solid black"
+              position="relative"
+              // animation
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1, transition: { duration: 0.5 } }}
+            >
               <Image
                 data-src={article.image}
                 alt={article.image.split("/").pop()}
@@ -124,8 +133,15 @@ const ArticlePage = observer(() => {
                 objectFit="contain"
                 className="lazyload"
               />
-              <Skeleton height="300px" />
-            </Box>
+              <Skeleton
+                height="100%"
+                width="100%"
+                position="absolute"
+                top="0"
+                left="0"
+                zIndex="docked"
+              />
+            </MotionBox>
 
             <Text
               mt="4"

@@ -1,12 +1,12 @@
 import { Button, ButtonProps } from "@chakra-ui/button";
 import { HStack, Text } from "@chakra-ui/layout";
 import { chakra } from "@chakra-ui/system";
-import { Dispatch, ReactNode, SetStateAction } from "react";
+import { useRouter } from "next/router";
+import { ReactNode } from "react";
 
 type Props = {
   currentPage: number;
   totalPages: number;
-  setCurrentPage: Dispatch<SetStateAction<number>>;
 };
 
 // Custom span component with chakra props
@@ -21,34 +21,47 @@ const PaginationButton = ({
   </Button>
 );
 
-const Pagination = ({ currentPage, totalPages, setCurrentPage }: Props) => {
+const Pagination = ({ currentPage, totalPages }: Props) => {
+  const router = useRouter();
+  const { query } = router;
+  const handleBeginningClick = () => {
+    router.push("/");
+  };
+  const handleEndClick = () => {
+    router.push(`/page/${totalPages}`);
+  };
+  const handlePrevClick = () => {
+    if (query.page === "2") return router.push("/");
+    const page = +query.page! - 1;
+    router.push(`/page/${page}`);
+  };
+  const handleNextClick = () => {
+    // If on homepage
+    if (!query.page) return router.push(`/page/2`);
+    const page = +query.page! + 1;
+    router.push(`/page/${page}`);
+  };
   return (
     <HStack alignSelf="center" mt="6" spacing="4">
       <PaginationButton
-        onClick={() => setCurrentPage(1)}
+        onClick={handleBeginningClick}
         disabled={currentPage === 1}
         px="2"
       >
         &lt;&lt;
       </PaginationButton>
-      <PaginationButton
-        onClick={() => setCurrentPage(prev => prev - 1)}
-        disabled={currentPage === 1}
-      >
+      <PaginationButton onClick={handlePrevClick} disabled={currentPage === 1}>
         &lt;
       </PaginationButton>
       <Text>
         Page <Span fontWeight="semibold">{currentPage}</Span> of{" "}
         <Span fontWeight="semibold">{totalPages ? totalPages : 1}</Span>
       </Text>
-      <PaginationButton
-        onClick={() => setCurrentPage(prev => prev + 1)}
-        disabled={currentPage === totalPages}
-      >
+      <PaginationButton onClick={handleNextClick} disabled={currentPage === totalPages}>
         &gt;
       </PaginationButton>
       <PaginationButton
-        onClick={() => setCurrentPage(totalPages)}
+        onClick={handleEndClick}
         disabled={currentPage === totalPages}
         px="2"
       >

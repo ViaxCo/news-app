@@ -18,7 +18,7 @@ type Props = {
 // Custom Box component with motion props
 type Merge<P, T> = Omit<P, keyof T> & T;
 type MotionBoxProps = Merge<HTMLChakraProps<"div">, HTMLMotionProps<"div">>;
-const MotionBox: React.FC<MotionBoxProps> = motion(Box);
+export const MotionBox: React.FC<MotionBoxProps> = motion(Box);
 
 dayjs.extend(relativeTime);
 dayjs.extend(customParseFormat);

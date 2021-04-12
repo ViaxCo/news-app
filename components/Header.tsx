@@ -11,7 +11,7 @@ const Header = () => {
       position="fixed"
       top="0"
       left="0"
-      zIndex="docked"
+      zIndex="banner"
       w="100%"
       bg="white"
       shadow="md"
