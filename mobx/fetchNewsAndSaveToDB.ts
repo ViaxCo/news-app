@@ -16,7 +16,7 @@ const fetchNewsAndSaveToDB = async () => {
     const news = res.data.news as ArticleType[];
     // Filter out articles with no image and long titles
     const filteredNews = news.filter(
-      article => article.image !== "None" && article.title.length <= 140
+      article => article.image !== "None" && article.title.length <= 120
     );
     filteredNews.forEach(async article => {
       const slug = kebabCase(article.title);
