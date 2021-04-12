@@ -11,12 +11,12 @@ const addCommentToDb = async (comment: string, slug: string) => {
     const filter = new Filter();
     const cleanedComment = filter.clean(comment);
     await db.ref("comments").set([
+      ...comments,
       {
         articleId: slug,
         text: cleanedComment,
         createdAt: firebase.database.ServerValue.TIMESTAMP as number,
       },
-      ...comments,
     ]);
     const snapshot2 = await db.ref("comments").get();
     const newComments = snapshot2.val();
