@@ -38,11 +38,16 @@ const MyApp = ({ Component, pageProps, router }: AppProps) => {
 MyApp.getInitialProps = async () => {
   // If called on the client
   if (typeof window !== "undefined")
-    return { pageProps: { fetchedData: { articles: newsStore.articles } } };
+    return {
+      pageProps: {
+        fetchedData: {
+          news: { articles: newsStore.articles, comments: newsStore.comments },
+        },
+      },
+    };
 
-  const newsSnapshot = await fetchNewsAndSaveToDB();
-  const articles = newsSnapshot.docs.map(doc => doc.data());
-  return { pageProps: { fetchedData: { articles } } };
+  const news = await fetchNewsAndSaveToDB();
+  return { pageProps: { fetchedData: { news } } };
 };
 
 export default MyApp;

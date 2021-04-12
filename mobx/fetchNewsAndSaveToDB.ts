@@ -1,12 +1,15 @@
 import axios from "axios";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 import kebabCase from "lodash/kebabCase";
 import { getFirebaseClient } from "../utils/firebase";
-import { ArticleType } from "./NewsStore";
+import { ArticleType, CommentType } from "./NewsStore";
+
+dayjs.extend(customParseFormat);
 
 const fetchNewsAndSaveToDB = async () => {
   const firebase = await getFirebaseClient();
-  const firestore = firebase.firestore();
-  const articlesRef = firestore.collection("articles");
+  const db = firebase.database();
 
   try {
     // Fetch news from Nigeria
@@ -18,30 +21,40 @@ const fetchNewsAndSaveToDB = async () => {
     const filteredNews = news.filter(
       article => article.image !== "None" && article.title.length <= 120
     );
-    filteredNews.forEach(async article => {
-      const slug = kebabCase(article.title);
-      try {
-        // Check if the article already exists in the db
-        const doc = await articlesRef.doc(slug).get();
-        // If it doesn't, save it
-        if (!doc.exists) {
-          await articlesRef.doc(slug).set({
-            ...article,
-            id: slug,
-            comments: [],
-          });
-        }
-      } catch (error) {
-        console.log(error);
+    // Turn all the ids to kebab-case
+    const kebabCaseTitledNews = filteredNews.map(article => ({
+      ...article,
+      id: kebabCase(article.title),
+    }));
+
+    const snapshot = await db.ref("articles").get();
+    const articles: ArticleType[] = snapshot.val();
+    const articleIds = articles.map(a => a.id);
+    // If there's any new article fetched from the api, add it to the articles from the db
+    kebabCaseTitledNews.forEach(article => {
+      if (!articleIds.includes(article.id)) {
+        articles.unshift(article);
       }
     });
+    await db.ref("articles").set(articles);
+
+    // Sort by published descending
+    const sortedArticles = articles.sort((a, b) =>
+      dayjs(b.published, "YYYY-MM-DD HH:mm:ss ZZ").isAfter(
+        dayjs(a.published, "YYYY-MM-DD HH:mm:ss ZZ")
+      )
+        ? 1
+        : -1
+    );
+
+    // Fetch Comments
+    const snapshot2 = await db.ref("comments").get();
+    const comments: CommentType[] = snapshot2.val();
+
+    return { articles: sortedArticles, comments };
   } catch (error) {
     console.log(error);
   }
-
-  // Fetch all the articles from db
-  const querySnapshot = await articlesRef.orderBy("published", "desc").get();
-  return querySnapshot;
 };
 
 export default fetchNewsAndSaveToDB;

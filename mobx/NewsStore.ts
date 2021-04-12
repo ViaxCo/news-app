@@ -6,8 +6,9 @@ import { FetchedData } from "./StoreProvider";
 enableStaticRendering(typeof window === "undefined");
 
 export type CommentType = {
+  articleId: string;
   text: string;
-  createdAt: { seconds: number; nanoseconds: number };
+  createdAt: number;
 };
 
 export type ArticleType = {
@@ -18,15 +19,16 @@ export type ArticleType = {
   author: string;
   image: string;
   published: string;
-  comments: CommentType[];
 };
 
 export class NewsStore {
   articles: ArticleType[] = [];
+  comments: CommentType[] = [];
 
   constructor() {
     makeObservable(this, {
       articles: observable,
+      comments: observable,
       addComment: action,
       hydrate: action,
     });
@@ -36,16 +38,16 @@ export class NewsStore {
     const article = articles.find(article => article.id === slug);
     if (!article) return;
     try {
-      const newsSnapshot = await addCommentToDb(article, comment, slug);
-      const articles = newsSnapshot.docs.map(doc => doc.data());
-      runInAction(() => (this.articles = articles as ArticleType[]));
+      const comments = await addCommentToDb(comment, slug);
+      runInAction(() => (this.comments = comments ?? this.comments));
     } catch (error) {
       console.log(error);
     }
   };
   hydrate = (fetchedData: FetchedData) => {
     if (!fetchedData) return;
-    this.articles = fetchedData.articles ?? [];
+    this.articles = fetchedData.news.articles ?? [];
+    this.comments = fetchedData.news.comments ?? [];
   };
 }
 const news = new NewsStore();

@@ -51,6 +51,10 @@ const ArticlePage = observer(() => {
 
   const news = useStore();
   const article = news.articles.find(article => article.id === slug);
+  const comments = news.comments.filter(com => com.articleId === article?.id);
+  const sortedComments = comments.sort((a, b) =>
+    dayjs(b.createdAt).isAfter(dayjs(a.createdAt)) ? 1 : -1
+  );
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -162,12 +166,11 @@ const ArticlePage = observer(() => {
             </Text>
 
             <Text mt="20" mb="4" fontWeight="semibold" borderBottom="1px solid black">
-              {article.comments.length}{" "}
-              {article.comments.length === 1 ? "Comment" : "Comments"}
+              {comments.length} {comments.length === 1 ? "Comment" : "Comments"}
             </Text>
 
             <AddComment slug={article.id} />
-            <Comments comments={article.comments} />
+            <Comments comments={sortedComments} />
           </>
         ) : (
           <NotFound param="article" />

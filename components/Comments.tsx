@@ -26,7 +26,7 @@ const Comments = ({ comments }: Props) => {
               <Span fontWeight="semibold">Anonymous</Span>
               <Span>•</Span>
               <Span color="#666" fontSize="xs">
-                {dayjs.unix(comment.createdAt.seconds).fromNow()}
+                {dayjs(comment.createdAt).fromNow()}
               </Span>
             </HStack>
             <Text>{comment.text}</Text>

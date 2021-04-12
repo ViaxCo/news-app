@@ -1,3 +1,13 @@
+jest.mock("next/router", () => ({
+  useRouter() {
+    return {
+      route: "/",
+      pathname: "/",
+      query: "",
+      asPath: "",
+    };
+  },
+}));
 import { render } from "@testing-library/react";
 import { nanoid } from "nanoid";
 import { StoreProvider } from "../../mobx/StoreProvider";
@@ -11,7 +21,6 @@ const mockArticle = {
   author: "string",
   image: "string",
   published: "string",
-  comments: [],
 };
 
 const mockArticles = Array(20)
@@ -37,7 +46,7 @@ describe("Home", () => {
   });
   it("renders without crashing", () => {
     render(
-      <StoreProvider fetchedData={{ articles: mockArticles }}>
+      <StoreProvider fetchedData={{ news: { articles: mockArticles, comments: [] } }}>
         <Home />
       </StoreProvider>
     );

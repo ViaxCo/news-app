@@ -6,10 +6,12 @@ import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { HTMLMotionProps, motion } from "framer-motion";
+import { observer } from "mobx-react-lite";
 import NextLink from "next/link";
 import { BsChat as ChatIcon } from "react-icons/bs";
 import { IoMdTime as TimeIcon } from "react-icons/io";
 import { ArticleType } from "../mobx/NewsStore";
+import { useStore } from "../mobx/StoreProvider";
 
 type Props = {
   article: ArticleType;
@@ -23,7 +25,10 @@ export const MotionBox: React.FC<MotionBoxProps> = motion(Box);
 dayjs.extend(relativeTime);
 dayjs.extend(customParseFormat);
 
-const ArticleCard = ({ article }: Props) => {
+const ArticleCard = observer(({ article }: Props) => {
+  const news = useStore();
+  const comments = news.comments.filter(com => com.articleId === article.id);
+
   return (
     <LinkBox
       as="article"
@@ -89,12 +94,12 @@ const ArticleCard = ({ article }: Props) => {
           {/* Comment count */}
           <Flex align="center">
             <Box as={ChatIcon} mr="1" />
-            <Text mt="0.5">{article.comments.length}</Text>
+            <Text mt="0.5">{comments.length}</Text>
           </Flex>
         </Flex>
       </Flex>
     </LinkBox>
   );
-};
+});
 
 export default ArticleCard;

@@ -1,22 +1,26 @@
 import { getFirebaseClient } from "../utils/firebase";
-import { ArticleType } from "./NewsStore";
 
-const addCommentToDb = async (article: ArticleType, comment: string, slug: string) => {
+const addCommentToDb = async (comment: string, slug: string) => {
   const firebase = await getFirebaseClient();
-  const firestore = firebase.firestore();
-  const articlesRef = firestore.collection("articles");
+  const db = firebase.database();
 
-  // Add new comment to the database
-  await articlesRef.doc(slug).set({
-    ...article,
-    comments: [
-      { text: comment, createdAt: firebase.firestore.Timestamp.now() },
-      ...article.comments,
-    ],
-  });
-  // Fetch updated articles
-  const querySnapshot = await articlesRef.orderBy("published", "desc").get();
-  return querySnapshot;
+  try {
+    const snapshot = await db.ref("comments").get();
+    const comments = snapshot.val();
+    await db.ref("comments").set([
+      {
+        articleId: slug,
+        text: comment,
+        createdAt: firebase.database.ServerValue.TIMESTAMP as number,
+      },
+      ...comments,
+    ]);
+    const snapshot2 = await db.ref("comments").get();
+    const newComments = snapshot2.val();
+    return newComments;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export default addCommentToDb;
