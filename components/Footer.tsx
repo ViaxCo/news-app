@@ -1,4 +1,4 @@
-import { Flex, Link } from "@chakra-ui/layout";
+import { Box, Flex, Link } from "@chakra-ui/layout";
 
 const Footer = () => {
   return (
@@ -12,17 +12,19 @@ const Footer = () => {
       mt="6"
       p="4"
     >
-      Copyright &copy; {new Date().getFullYear()}
-      <Link
-        href="https://www.viaxco.com"
-        target="_blank"
-        rel="noopener noreferrer"
-        color="blue.600"
-        mx="1.5"
-      >
-        ViaxCo.
-      </Link>
-      All Rights Reserved
+      <Box as="span">
+        Copyright &copy; {new Date().getFullYear()}
+        <Link
+          href="https://www.viaxco.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          color="blue.600"
+          mx="1.5"
+        >
+          ViaxCo.
+        </Link>
+        All Rights Reserved
+      </Box>
     </Flex>
   );
 };
