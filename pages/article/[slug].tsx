@@ -7,13 +7,13 @@ import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { HTMLMotionProps, motion } from "framer-motion";
 import { observer } from "mobx-react-lite";
-import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { BsArrowLeftShort as ArrowBackIcon } from "react-icons/bs";
 import AddComment from "../../components/AddComment";
 import { MotionBox } from "../../components/ArticleCard";
 import Comments from "../../components/Comments";
+import Meta from "../../components/Meta";
 import NotFound from "../../components/NotFound";
 import { useStore } from "../../mobx/StoreProvider";
 
@@ -62,9 +62,13 @@ const ArticlePage = observer(() => {
 
   return (
     <>
-      <Head>
-        <title>{article?.title ?? "News App"}</title>
-      </Head>
+      <Meta
+        title={article?.title}
+        description={article?.description}
+        image={article?.image}
+        twitterCard="summary_large_image"
+        key="article"
+      />
 
       <MotionFlex
         flex="1"
