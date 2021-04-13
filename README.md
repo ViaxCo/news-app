@@ -1,6 +1,6 @@
 # news-app
 
-This app displays a news feed of various articles and each article has a section for comments. Built using NextJS, Mobx and Firebase Realtime Database.
+This app displays a news feed of various articles and each article has a section for comments. Built using NextJS, Mobx, Firebase Realtime Database and [Currents API](http://currentsapi.services/) to fetch news.
 
 The `firestore` branch contains the exact project built with Firestore.
 
