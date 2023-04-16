@@ -4,7 +4,7 @@ type Props = {
   title?: string;
   description?: string;
   image?: string;
-  key: string;
+  name: string;
   twitterCard?: string;
 };
 
@@ -13,7 +13,7 @@ const Meta = ({
   description = "News Application that displays the news feed of various articles and each article has a section for comments.",
   image = "https://bit.ly/3sdPgzk",
   twitterCard = "summary",
-  key,
+  name,
 }: Props) => {
   return (
     <Head>
@@ -21,10 +21,10 @@ const Meta = ({
       <meta name="description" content={description} />
 
       {/* Open Graph & Twitter */}
-      <meta property="og:title" content={title} key={`${key}-ogtitle`} />
-      <meta property="og:description" content={description} key={`${key}-ogdesc`} />
-      <meta property="og:image" content={image} key={`${key}-ogimage`} />
-      <meta property="twitter:card" content={twitterCard} key={`${key}-twitter`} />
+      <meta property="og:title" content={title} key={`${name}-ogtitle`} />
+      <meta property="og:description" content={description} key={`${name}-ogdesc`} />
+      <meta property="og:image" content={image} key={`${name}-ogimage`} />
+      <meta property="twitter:card" content={twitterCard} key={`${name}-twitter`} />
 
       <title>{title}</title>
     </Head>

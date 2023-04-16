@@ -67,7 +67,7 @@ const ArticlePage = observer(() => {
         description={article?.description}
         image={article?.image}
         twitterCard="summary_large_image"
-        key="article"
+        name="article"
       />
 
       <MotionFlex
