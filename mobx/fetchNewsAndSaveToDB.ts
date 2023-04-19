@@ -11,6 +11,15 @@ const fetchNewsAndSaveToDB = async () => {
   const firebase = await getFirebaseClient();
   const db = firebase.database();
 
+  // Fetch Articles
+  const snapshot = await db.ref("articles").get();
+  const articles: ArticleType[] = snapshot.val();
+  const articleIds = articles.map(a => a.id);
+
+  // Fetch Comments
+  const snapshot2 = await db.ref("comments").get();
+  const comments: CommentType[] = snapshot2.val();
+
   try {
     // Fetch news from Nigeria
     const res = await axios.get(
@@ -27,9 +36,6 @@ const fetchNewsAndSaveToDB = async () => {
       id: kebabCase(article.title),
     }));
 
-    const snapshot = await db.ref("articles").get();
-    const articles: ArticleType[] = snapshot.val();
-    const articleIds = articles.map(a => a.id);
     // If there's any new article fetched from the api, add it to the articles from the db
     kebabCaseTitledNews.forEach(article => {
       if (!articleIds.includes(article.id)) {
@@ -39,22 +45,24 @@ const fetchNewsAndSaveToDB = async () => {
     await db.ref("articles").set(articles);
 
     // Sort by published descending
-    const sortedArticles = articles.sort((a, b) =>
-      dayjs(b.published, "YYYY-MM-DD HH:mm:ss ZZ").isAfter(
-        dayjs(a.published, "YYYY-MM-DD HH:mm:ss ZZ")
-      )
-        ? 1
-        : -1
-    );
-
-    // Fetch Comments
-    const snapshot2 = await db.ref("comments").get();
-    const comments: CommentType[] = snapshot2.val();
+    const sortedArticles = sortArticles(articles);
 
     return { articles: sortedArticles, comments };
   } catch (error) {
     console.log(error);
+    const sortedArticles = sortArticles(articles);
+    return { articles: sortedArticles, comments };
   }
 };
 
+function sortArticles(articles: ArticleType[]) {
+  // Sort by published descending
+  return articles.sort((a, b) =>
+    dayjs(b.published, "YYYY-MM-DD HH:mm:ss ZZ").isAfter(
+      dayjs(a.published, "YYYY-MM-DD HH:mm:ss ZZ")
+    )
+      ? 1
+      : -1
+  );
+}
 export default fetchNewsAndSaveToDB;
