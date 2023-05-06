@@ -2,6 +2,7 @@ import type { ArticleType } from "@/mobx/NewsStore";
 import { useStore } from "@/mobx/StoreProvider";
 import { Image } from "@chakra-ui/image";
 import { Box, Flex, LinkBox, LinkOverlay, Text } from "@chakra-ui/layout";
+import { Skeleton } from "@chakra-ui/skeleton";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -46,26 +47,28 @@ const ArticleCard = observer(({ article }: Props) => {
       <MotionBox
         w="100%"
         h="200px"
+        position="relative"
         // animation
         initial={{ opacity: 0 }}
         animate={{ opacity: 1, transition: { duration: 0.5 } }}
       >
         <Image
-          src={article.image}
+          data-src={article.image}
           alt={article.image.split("/").pop()}
           w="100%"
           h="100%"
           objectFit="cover"
           objectPosition="center top"
+          className="lazyload"
         />
-        {/* <Skeleton
+        <Skeleton
           height="100%"
           width="100%"
           position="absolute"
           top="0"
           left="0"
           zIndex="docked"
-        /> */}
+        />
       </MotionBox>
 
       <Flex p="3" direction="column" flex="1" justify="space-between">
