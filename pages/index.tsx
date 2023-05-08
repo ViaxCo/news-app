@@ -1,5 +1,7 @@
-import Page from "@/components/Page";
+import Page from "./page/[page]";
 
-export default function Home() {
+const Home = () => {
   return <Page />;
-}
+};
+
+export default Home;

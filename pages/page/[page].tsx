@@ -1,11 +1,11 @@
+import Articles from "@/components/Articles";
+import NotFound from "@/components/NotFound";
+import Pagination from "@/components/Pagination";
 import { useStore } from "@/mobx/StoreProvider";
 import { Flex, Heading, Text } from "@chakra-ui/layout";
 import { motion } from "framer-motion";
 import { observer } from "mobx-react-lite";
 import { useRouter } from "next/router";
-import Articles from "./Articles";
-import NotFound from "./NotFound";
-import Pagination from "./Pagination";
 
 const Page = observer(() => {
   const { pathname, query } = useRouter();

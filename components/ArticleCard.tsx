@@ -15,6 +15,7 @@ type Props = {
   article: ArticleType;
 };
 
+// Custom Box component with motion props
 export const MotionBox = motion(Box);
 
 dayjs.extend(relativeTime);
