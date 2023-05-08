@@ -1,27 +1,39 @@
-import { commentsRef } from "@/utils/firebase";
+import { db } from "@/utils/firebase";
 import Filter from "bad-words";
-import { get, serverTimestamp, set } from "firebase/database";
+import { serverTimestamp } from "firebase/database";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import type { ArticleType, CommentType } from "./NewsStore";
 
-const addCommentToDb = async (comment: string, slug: string) => {
+const addCommentToDb = async (comments: CommentType[], comment: string, slug: string) => {
   try {
-    const commentsSnapshot = await get(commentsRef);
-    const comments = commentsSnapshot.val();
     const filter = new Filter();
     const cleanedComment = filter.clean(comment);
-    await set(commentsRef, [
-      ...comments,
-      {
-        articleId: slug,
-        text: cleanedComment,
-        createdAt: serverTimestamp(),
-      },
-    ]);
-    const commentsSnapshot2 = await get(commentsRef);
-    const newComments = commentsSnapshot2.val();
-    return newComments;
+
+    const articleRef = doc(db, "articles", slug);
+
+    await updateDoc(articleRef, {
+      comments: [
+        {
+          articleId: slug,
+          text: cleanedComment,
+          createdAt: serverTimestamp(),
+        },
+        ...comments,
+      ],
+    });
+
+    const articleSnapshot = await getDoc(articleRef);
+
+    if (articleSnapshot.exists()) {
+      const article = articleSnapshot.data() as ArticleType;
+      return article.comments;
+    } else {
+      return comments;
+    }
   } catch (error) {
     // TODO: Do something meaningful here
     console.log(error);
+    return comments;
   }
 };
 

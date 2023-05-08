@@ -19,22 +19,25 @@ export type ArticleType = {
   author: string;
   image: string;
   published: string;
+  comments: CommentType[];
 };
 
 export class NewsStore {
   articles: ArticleType[] = [];
-  comments: CommentType[] = [];
 
   constructor() {
     makeAutoObservable(this);
   }
-  addComment = async (comment: string, slug: string) => {
-    const articles = this.articles;
-    const article = articles.find(article => article.id === slug);
-    if (!article) return;
+  addComment = async (comments: CommentType[], comment: string, slug: string) => {
+    const found = this.articles.find(article => article.id === slug);
+    if (!found) return;
     try {
-      const comments = await addCommentToDb(comment, slug);
-      this.comments = comments ?? this.comments;
+      const newComments = await addCommentToDb(comments, comment, slug);
+      this.articles = this.articles.map(article =>
+        article.id === slug
+          ? { ...article, comments: newComments ?? article.comments }
+          : article
+      );
     } catch (error) {
       // TODO: Do something meaningful here
       console.log(error);
@@ -42,7 +45,6 @@ export class NewsStore {
   };
   hydrate = (fetchedData: FetchedData) => {
     if (!fetchedData) return;
-    this.articles = fetchedData.news.articles ?? [];
-    this.comments = fetchedData.news.comments ?? [];
+    this.articles = fetchedData.articles ?? [];
   };
 }

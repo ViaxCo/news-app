@@ -1,5 +1,4 @@
 import type { ArticleType } from "@/mobx/NewsStore";
-import { useStore } from "@/mobx/StoreProvider";
 import { Image } from "@chakra-ui/image";
 import { Box, Flex, LinkBox, LinkOverlay, Text } from "@chakra-ui/layout";
 import { Skeleton } from "@chakra-ui/skeleton";
@@ -22,9 +21,6 @@ dayjs.extend(relativeTime);
 dayjs.extend(customParseFormat);
 
 const ArticleCard = observer(({ article }: Props) => {
-  const news = useStore();
-  const comments = news.comments.filter(com => com.articleId === article.id);
-
   return (
     <LinkBox
       as="article"
@@ -95,7 +91,7 @@ const ArticleCard = observer(({ article }: Props) => {
           {/* Comment count */}
           <Flex align="center">
             <Box as={ChatIcon} mr="1" />
-            <Text mt="0.5">{comments.length}</Text>
+            <Text mt="0.5">{article.comments.length}</Text>
           </Flex>
         </Flex>
       </Flex>

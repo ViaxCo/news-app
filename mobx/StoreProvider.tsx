@@ -1,8 +1,8 @@
 import { createContext, ReactNode, useContext } from "react";
-import { ArticleType, CommentType, NewsStore } from "./NewsStore";
+import { ArticleType, NewsStore } from "./NewsStore";
 
 export type FetchedData = {
-  news: { articles: ArticleType[]; comments: CommentType[] };
+  articles: ArticleType[];
 };
 
 type Provider = {
