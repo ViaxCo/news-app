@@ -1,41 +1,43 @@
 import Container from "@/components/Container";
 import Meta from "@/components/Meta";
-import { StoreProvider, newsStore } from "@/mobx/StoreProvider";
-import fetchNewsAndSaveToDB from "@/mobx/fetchNewsAndSaveToDB";
 import theme from "@/theme";
 import { ChakraProvider } from "@chakra-ui/react";
 // Remove blue outline from buttons and links
 import "focus-visible/dist/focus-visible";
-import { AnimatePresence } from "framer-motion";
 // Lazy load images
 import "lazysizes";
 import type { AppProps } from "next/app";
+import { Router } from "next/router";
+import { useEffect, useState } from "react";
 
-const App = ({ Component, pageProps, router }: AppProps) => {
+const App = ({ Component, pageProps }: AppProps) => {
+  const [isLoading, setLoading] = useState(false);
+  // Add loading indicator when routes change
+  useEffect(() => {
+    const start = () => setLoading(true);
+
+    const end = () => setLoading(false);
+
+    Router.events.on("routeChangeStart", start);
+    Router.events.on("routeChangeComplete", end);
+    Router.events.on("routeChangeError", end);
+    return () => {
+      Router.events.off("routeChangeStart", start);
+      Router.events.off("routeChangeComplete", end);
+      Router.events.off("routeChangeError", end);
+    };
+  }, []);
   return (
     <>
       <Meta id="home" />
 
       <ChakraProvider theme={theme}>
-        <Container>
-          <AnimatePresence initial={false} mode="wait">
-            <StoreProvider fetchedData={pageProps.fetchedData}>
-              <Component {...pageProps} key={router.route} />
-            </StoreProvider>
-          </AnimatePresence>
+        <Container isLoading={isLoading}>
+          <Component {...pageProps} />
         </Container>
       </ChakraProvider>
     </>
   );
-};
-
-App.getInitialProps = async () => {
-  // If called on the client
-  if (typeof window !== "undefined")
-    return { pageProps: { fetchedData: { articles: newsStore.articles } } };
-
-  const articles = await fetchNewsAndSaveToDB();
-  return { pageProps: { fetchedData: { articles } } };
 };
 
 export default App;

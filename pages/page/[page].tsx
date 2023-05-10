@@ -1,65 +1,68 @@
+import { Article } from "@/components/ArticleCard";
 import Articles from "@/components/Articles";
-import NotFound from "@/components/NotFound";
 import Pagination from "@/components/Pagination";
-import { useStore } from "@/mobx/StoreProvider";
 import { Flex, Heading, Text } from "@chakra-ui/layout";
-import { motion } from "framer-motion";
-import { observer } from "mobx-react-lite";
+import axios from "axios";
+import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 
-const Page = observer(() => {
-  const { pathname, query } = useRouter();
+type Props = {
+  articles: Article[];
+};
+
+const totalPages = 100;
+
+const Page = ({ articles }: Props) => {
+  const { query } = useRouter();
   const { page } = query;
-  // TODO: Check to make sure `page` is not undefined
 
-  const news = useStore();
-
-  // Pagination details
-  const articleCardsPerPage = 20;
-  const totalPages = Math.ceil(news.articles.length / articleCardsPerPage);
-
-  const currentPage = pathname === "/" ? 1 : +page!;
-  const indexOfLastArticleCard = currentPage * articleCardsPerPage;
-  const indexOfFirstArticleCard = indexOfLastArticleCard - articleCardsPerPage;
-  const currentArticles = news.articles.slice(
-    indexOfFirstArticleCard,
-    indexOfLastArticleCard
-  );
-
-  return pathname === "/" || inRange(page!, 1, totalPages) ? (
-    <motion.div
-      style={{ display: "flex", flexDirection: "column", flex: 1 }}
-      variants={{
-        initial: { opacity: 1 },
-        animate: { opacity: 1 },
-        exit: { opacity: 0 },
-      }}
-      initial="initial"
-      animate="animate"
-      exit="exit"
-    >
+  return (
+    <Flex direction="column" flex={1}>
       <Flex borderBottom="2px solid black" align="center" justify="space-between">
         <Heading ml="2" fontSize={["2xl", "3xl"]} fontWeight="semibold">
           Articles
         </Heading>
         <Text mr="2" fontSize="small" color="#666">
-          Page {currentPage}
+          Page {page}
         </Text>
       </Flex>
-      <Articles articles={currentArticles} />
-      <Pagination currentPage={currentPage} totalPages={totalPages} />
-    </motion.div>
-  ) : (
-    <NotFound param="page" />
-  );
-});
-
-export default Page;
-
-const inRange = (number: string | string[], start: number, end: number) => {
-  if (Array.isArray(number)) return;
-  if (!Number.isInteger(parseFloat(number))) return;
-  return (
-    parseInt(number) >= Math.min(start, end) && parseInt(number) <= Math.max(start, end)
+      <Articles articles={articles} />
+      <Pagination currentPage={+page!} totalPages={totalPages} />
+    </Flex>
   );
 };
+
+export const getServerSideProps: GetServerSideProps = async context => {
+  const { params } = context;
+  const page = Number(params?.page);
+  if (page > 0 && page <= totalPages) {
+    try {
+      // Fetch news from Nigeria
+      const res = await axios.get(
+        `https://api.currentsapi.services/v1/search?apiKey=${process.env.API_KEY}&country=NG&page_number=${page}&page_size=20`
+      );
+      const articles = res.data.news as Article[];
+      // TODO: Handle articles with no image and long titles
+      // const filteredNews = articles.filter(
+      //   article => article.image !== "None" && article.title.length <= 120
+      // );
+
+      return {
+        props: {
+          articles,
+        },
+      };
+    } catch (error) {
+      console.error(error);
+      return {
+        notFound: true,
+      };
+    }
+  } else {
+    return {
+      notFound: true,
+    };
+  }
+};
+
+export default Page;

@@ -1,7 +1,5 @@
-import Page from "./page/[page]";
-
 const Home = () => {
-  return <Page />;
+  return null;
 };
 
 export default Home;

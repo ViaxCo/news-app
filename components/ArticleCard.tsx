@@ -1,4 +1,3 @@
-import type { ArticleType } from "@/mobx/NewsStore";
 import { Image } from "@chakra-ui/image";
 import { Box, Flex, LinkBox, LinkOverlay, Text } from "@chakra-ui/layout";
 import { Skeleton } from "@chakra-ui/skeleton";
@@ -6,22 +5,29 @@ import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { motion } from "framer-motion";
-import { observer } from "mobx-react-lite";
-import NextLink from "next/link";
-import { BsChat as ChatIcon } from "react-icons/bs";
 import { IoMdTime as TimeIcon } from "react-icons/io";
 
+export type Article = {
+  id: string;
+  title: string;
+  description: string;
+  url: string;
+  author: string;
+  image: string;
+  published: string;
+};
+
 type Props = {
-  article: ArticleType;
+  article: Article;
 };
 
 // Custom Box component with motion props
-export const MotionBox = motion(Box);
+const MotionBox = motion(Box);
 
 dayjs.extend(relativeTime);
 dayjs.extend(customParseFormat);
 
-const ArticleCard = observer(({ article }: Props) => {
+const ArticleCard = ({ article }: Props) => {
   return (
     <LinkBox
       as="article"
@@ -72,32 +78,25 @@ const ArticleCard = observer(({ article }: Props) => {
         {/* Title */}
         <Text fontWeight="semibold">
           <LinkOverlay
-            as={NextLink}
             className="title"
-            href={`/article/${article.id}`}
-            scroll={false}
+            href={article.url}
+            target="_blank"
+            rel="noopener noreferrer"
           >
             {article.title}
           </LinkOverlay>
         </Text>
 
-        <Flex align="center" justify="space-between" fontSize="sm" color="#666" mt="1">
-          {/* Time */}
-          <Flex align="center">
-            <Box as={TimeIcon} mr="1" />
-            <Text mt="0.5">
-              {dayjs(article.published, "YYYY-MM-DD HH:mm:ss ZZ").fromNow()}
-            </Text>
-          </Flex>
-          {/* Comment count */}
-          <Flex align="center">
-            <Box as={ChatIcon} mr="1" />
-            <Text mt="0.5">{article.comments.length}</Text>
-          </Flex>
+        {/* Time */}
+        <Flex align="center" fontSize="sm" color="#666" mt="1">
+          <Box as={TimeIcon} mr="1" />
+          <Text mt="0.5">
+            {dayjs(article.published, "YYYY-MM-DD HH:mm:ss ZZ").fromNow()}
+          </Text>
         </Flex>
       </Flex>
     </LinkBox>
   );
-});
+};
 
 export default ArticleCard;

@@ -24,19 +24,16 @@ const Pagination = ({ currentPage, totalPages }: Props) => {
   const router = useRouter();
   const { query } = router;
   const handleBeginningClick = () => {
-    router.push("/");
+    router.push("/page/1");
   };
   const handleEndClick = () => {
     router.push(`/page/${totalPages}`);
   };
   const handlePrevClick = () => {
-    if (query.page === "2") return router.push("/");
     const page = +query.page! - 1;
     router.push(`/page/${page}`);
   };
   const handleNextClick = () => {
-    // If on homepage
-    if (!query.page) return router.push(`/page/2`);
     const page = +query.page! + 1;
     router.push(`/page/${page}`);
   };

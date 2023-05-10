@@ -1,9 +1,9 @@
-import type { ArticleType } from "@/mobx/NewsStore";
 import { Grid } from "@chakra-ui/layout";
+import type { Article } from "./ArticleCard";
 import ArticleCard from "./ArticleCard";
 
 type Props = {
-  articles: ArticleType[];
+  articles: Article[];
 };
 
 const Articles = ({ articles }: Props) => {

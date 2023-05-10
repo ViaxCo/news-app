@@ -1,7 +1,12 @@
 import { Flex, Heading, Link } from "@chakra-ui/layout";
 import NextLink from "next/link";
+import ProgressLine from "./ProgressLine";
 
-const Header = () => {
+type Props = {
+  isLoading: boolean;
+};
+
+const Header = ({ isLoading }: Props) => {
   return (
     <Flex
       as="header"
@@ -17,10 +22,11 @@ const Header = () => {
       shadow="md"
     >
       <Heading as="h1" fontWeight="semibold" fontFamily="libre_baskerville">
-        <Link as={NextLink} href="/" _hover={{ textDecoration: "none" }}>
+        <Link as={NextLink} href="/page/1" _hover={{ textDecoration: "none" }}>
           News App
         </Link>
       </Heading>
+      {isLoading && <ProgressLine />}
     </Flex>
   );
 };
