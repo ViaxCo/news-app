@@ -63,7 +63,7 @@ const ArticleCard = ({ article }: Props) => {
           src={`https://res.cloudinary.com/viaxco/image/fetch/${encodeURIComponent(
             article.image
           )}`}
-          alt={article.image.split("/").pop()!}
+          alt={article.title}
           onLoadingComplete={() => setImgLoading(false)}
           width={340}
           height={200}
