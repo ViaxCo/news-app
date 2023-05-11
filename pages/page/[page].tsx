@@ -1,6 +1,7 @@
 import { Article } from "@/components/ArticleCard";
 import Articles from "@/components/Articles";
 import Pagination from "@/components/Pagination";
+import fallbackImage from "@/public/fallback.jpg";
 import { Flex, Heading, Text } from "@chakra-ui/layout";
 import axios from "axios";
 import { GetServerSideProps } from "next";
@@ -39,17 +40,17 @@ export const getServerSideProps: GetServerSideProps = async context => {
     try {
       // Fetch news from Nigeria
       const res = await axios.get(
-        `https://api.currentsapi.services/v1/search?apiKey=${process.env.API_KEY}&country=NG&page_number=${page}&page_size=20`
+        `https://api.currentsapi.services/v1/search?apiKey=${process.env.API_KEY}&country=NG&page_number=${page}&page_size=20&domain_not=theguardian.com`
       );
       const articles = res.data.news as Article[];
-      // TODO: Handle articles with no image and long titles
-      // const filteredNews = articles.filter(
-      //   article => article.image !== "None" && article.title.length <= 120
-      // );
+
+      const articlesWithImages = articles.map(article =>
+        article.image === "None" ? { ...article, image: fallbackImage } : article
+      );
 
       return {
         props: {
-          articles,
+          articles: articlesWithImages,
         },
       };
     } catch (error) {

@@ -4,8 +4,6 @@ import theme from "@/theme";
 import { ChakraProvider } from "@chakra-ui/react";
 // Remove blue outline from buttons and links
 import "focus-visible/dist/focus-visible";
-// Lazy load images
-import "lazysizes";
 import type { AppProps } from "next/app";
 import { Router } from "next/router";
 import { useEffect, useState } from "react";

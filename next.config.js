@@ -10,6 +10,15 @@ const nextConfig = {
       },
     ];
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        pathname: "/viaxco/image/fetch/**",
+      },
+    ],
+  },
 };
 
 module.exports = nextConfig;
