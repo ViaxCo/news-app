@@ -20,6 +20,7 @@ export type Article = {
 
 type Props = {
   article: Article;
+  index: number;
 };
 
 // Custom Box component with motion props
@@ -28,7 +29,7 @@ const MotionBox = motion(Box);
 dayjs.extend(relativeTime);
 dayjs.extend(customParseFormat);
 
-const ArticleCard = ({ article }: Props) => {
+const ArticleCard = ({ article, index }: Props) => {
   const [imgLoading, setImgLoading] = useState(true);
 
   return (
@@ -68,8 +69,9 @@ const ArticleCard = ({ article }: Props) => {
           width={340}
           height={200}
           style={{ objectFit: "contain", objectPosition: "center top" }}
+          priority={index === 0}
         />
-        {imgLoading && (
+        {index !== 0 && imgLoading && (
           <Skeleton
             height="100%"
             width="100%"

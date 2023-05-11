@@ -15,8 +15,8 @@ const Articles = ({ articles }: Props) => {
       gap="4"
       mt="4"
     >
-      {articles.map(article => (
-        <ArticleCard key={article.id} article={article} />
+      {articles.map((article, index) => (
+        <ArticleCard key={article.id} article={article} index={index} />
       ))}
     </Grid>
   );
