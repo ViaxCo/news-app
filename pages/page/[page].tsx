@@ -33,13 +33,13 @@ const Page = ({ articles }: Props) => {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
+  const pages = Array.from({ length: totalPages }, (_, i) => (i + 1).toString());
+  const paths = pages.map(page => ({
+    params: { page },
+  }));
+
   return {
-    paths: [
-      { params: { page: "1" } },
-      { params: { page: "2" } },
-      { params: { page: "49" } },
-      { params: { page: "50" } },
-    ],
+    paths,
     fallback: "blocking",
   };
 };
