@@ -1,10 +1,9 @@
 import { Article } from "@/components/ArticleCard";
 import Articles from "@/components/Articles";
 import Pagination from "@/components/Pagination";
-import fallbackImage from "@/public/fallback.jpg";
 import { Flex, Heading, Text } from "@chakra-ui/layout";
 import axios from "axios";
-import { GetServerSideProps } from "next";
+import { GetStaticPaths, GetStaticProps } from "next";
 import { useRouter } from "next/router";
 
 type Props = {
@@ -33,7 +32,19 @@ const Page = ({ articles }: Props) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async context => {
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    paths: [
+      { params: { page: "1" } },
+      { params: { page: "2" } },
+      { params: { page: "49" } },
+      { params: { page: "50" } },
+    ],
+    fallback: "blocking",
+  };
+};
+
+export const getStaticProps: GetStaticProps = async context => {
   const { params } = context;
   const page = Number(params?.page);
   if (page > 0 && page <= totalPages) {
@@ -44,14 +55,12 @@ export const getServerSideProps: GetServerSideProps = async context => {
       );
       const articles = res.data.news as Article[];
 
-      const articlesWithImages = articles.map(article =>
-        article.image === "None" ? { ...article, image: fallbackImage } : article
-      );
-
       return {
         props: {
-          articles: articlesWithImages,
+          articles,
         },
+        // revalidate every 3 hours
+        revalidate: 10800,
       };
     } catch (error) {
       console.error(error);
