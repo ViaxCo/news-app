@@ -10,7 +10,7 @@ type Props = {
   articles: Article[];
 };
 
-const totalPages = 50;
+const totalPages = 25;
 
 const Page = ({ articles }: Props) => {
   const { query } = useRouter();
