@@ -11,7 +11,7 @@ type Props = {
 const Meta = ({
   title = "News App",
   description = "News Application that displays the news feed of various articles and each article has a section for comments.",
-  image = "https://bit.ly/3sdPgzk",
+  image = "https://viaxco-news-app.vercel.app/api/og",
   twitterCard = "summary",
   id,
 }: Props) => {
