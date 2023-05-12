@@ -1,14 +1,18 @@
 import { Box, Flex, LinkBox, LinkOverlay, Text } from "@chakra-ui/layout";
-import { Skeleton } from "@chakra-ui/skeleton";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoMdTime as TimeIcon } from "react-icons/io";
 import ImageWithFallback from "./ImageWithFallback";
 
-export type Article = {
+type ImageProps = {
+  base64: string;
+  src: string;
+};
+
+export type ArticleFromApi = {
   id: string;
   title: string;
   description: string;
@@ -16,6 +20,10 @@ export type Article = {
   author: string;
   image: string;
   published: string;
+};
+
+export type Article = Omit<ArticleFromApi, "image"> & {
+  image: ImageProps;
 };
 
 type Props = {
@@ -30,7 +38,15 @@ dayjs.extend(relativeTime);
 dayjs.extend(customParseFormat);
 
 const ArticleCard = ({ article, index }: Props) => {
-  const [imgLoading, setImgLoading] = useState(true);
+  // Render static date on the server
+  const [dateFromNow, setDateFromNow] = useState(
+    dayjs(article.published, "YYYY-MM-DD HH:mm:ss ZZ").format("DD/MM/YYYY - HH:mm")
+  );
+
+  // When on client, update the relative time to the correct time based on the client's time
+  useEffect(() => {
+    setDateFromNow(dayjs(article.published, "YYYY-MM-DD HH:mm:ss ZZ").fromNow());
+  }, []);
 
   return (
     <LinkBox
@@ -57,30 +73,22 @@ const ArticleCard = ({ article, index }: Props) => {
         overflow={"hidden"}
         position="relative"
         // animation
-        initial={{ opacity: 0 }}
+        // use initial={false} for server side rendering
+        initial={false}
         animate={{ opacity: 1, transition: { duration: 0.5 } }}
       >
         <ImageWithFallback
           src={`https://res.cloudinary.com/viaxco/image/fetch/${encodeURIComponent(
-            article.image
+            article.image.src
           )}`}
           alt={article.title}
-          onLoadingComplete={() => setImgLoading(false)}
           width={340}
           height={200}
           style={{ objectFit: "contain", objectPosition: "center top" }}
           priority={index === 0}
+          placeholder="blur"
+          blurDataURL={article.image.base64}
         />
-        {index !== 0 && imgLoading && (
-          <Skeleton
-            height="100%"
-            width="100%"
-            position="absolute"
-            top="0"
-            left="0"
-            zIndex="docked"
-          />
-        )}
       </MotionBox>
 
       <Flex p="3" direction="column" flex="1">
@@ -101,9 +109,7 @@ const ArticleCard = ({ article, index }: Props) => {
         {/* Time */}
         <Flex align="center" fontSize="sm" color="#666" mt="1">
           <Box as={TimeIcon} mr="1" />
-          <Text mt="0.5">
-            {dayjs(article.published, "YYYY-MM-DD HH:mm:ss ZZ").fromNow()}
-          </Text>
+          <Text mt="0.5">{dateFromNow}</Text>
         </Flex>
       </Flex>
     </LinkBox>
