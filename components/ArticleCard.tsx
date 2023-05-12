@@ -2,6 +2,8 @@ import { Box, Flex, LinkBox, LinkOverlay, Text } from "@chakra-ui/layout";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
+import timezone from "dayjs/plugin/timezone"; // dependent on utc plugin
+import utc from "dayjs/plugin/utc";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { IoMdTime as TimeIcon } from "react-icons/io";
@@ -36,16 +38,20 @@ const MotionBox = motion(Box);
 
 dayjs.extend(relativeTime);
 dayjs.extend(customParseFormat);
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.tz.setDefault("Africa/Lagos");
 
 const ArticleCard = ({ article, index }: Props) => {
+  const publishedDate = dayjs(article.published, "YYYY-MM-DD HH:mm:ss ZZ").tz();
   // Render static date on the server
   const [dateFromNow, setDateFromNow] = useState(
-    dayjs(article.published, "YYYY-MM-DD HH:mm:ss ZZ").format("DD/MM/YYYY - HH:mm")
+    publishedDate.format("DD/MM/YYYY - HH:mm")
   );
 
   // When on client, update the relative time to the correct time based on the client's time
   useEffect(() => {
-    setDateFromNow(dayjs(article.published, "YYYY-MM-DD HH:mm:ss ZZ").fromNow());
+    setDateFromNow(publishedDate.fromNow());
   }, []);
 
   return (
