@@ -91,7 +91,7 @@ const ArticleCard = ({ article, index }: Props) => {
           width={340}
           height={200}
           style={{ objectFit: "contain", objectPosition: "center top" }}
-          priority={index === 0}
+          priority={index === 0 || index === 1}
           placeholder="blur"
           blurDataURL={article.image.base64}
         />
