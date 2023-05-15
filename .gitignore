@@ -36,4 +36,7 @@ yarn-error.log*
 # Requests
 api.http
 
-.vscode
+/.vscode
+
+/.history
+TODO
