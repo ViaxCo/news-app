@@ -4,7 +4,6 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
 import timezone from "dayjs/plugin/timezone"; // dependent on utc plugin
 import utc from "dayjs/plugin/utc";
-import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { IoMdTime as TimeIcon } from "react-icons/io";
 import ImageWithFallback from "./ImageWithFallback";
@@ -32,9 +31,6 @@ type Props = {
   article: Article;
   index: number;
 };
-
-// Custom Box component with motion props
-const MotionBox = motion(Box);
 
 dayjs.extend(relativeTime);
 dayjs.extend(customParseFormat);
@@ -73,16 +69,7 @@ const ArticleCard = ({ article, index }: Props) => {
       }}
     >
       {/* Image */}
-      <MotionBox
-        w="100%"
-        h="200px"
-        overflow={"hidden"}
-        position="relative"
-        // animation
-        // use initial={false} for server side rendering
-        initial={false}
-        animate={{ opacity: 1, transition: { duration: 0.5 } }}
-      >
+      <Box w="100%" h="200px" overflow={"hidden"} position="relative">
         <ImageWithFallback
           src={`https://res.cloudinary.com/viaxco/image/fetch/${encodeURIComponent(
             article.image.src
@@ -95,7 +82,7 @@ const ArticleCard = ({ article, index }: Props) => {
           placeholder="blur"
           blurDataURL={article.image.base64}
         />
-      </MotionBox>
+      </Box>
 
       <Flex p="3" direction="column" flex="1">
         {/* Title */}
