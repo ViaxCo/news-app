@@ -2,6 +2,8 @@
 
 This app displays a news feed of various articles and each article has a section for comments. Built using NextJS, Mobx, Firebase Firestore and [Currents API](http://currentsapi.services/) to fetch news.
 
+The `rt-db` branch contains the exact project built with Realtime Database.
+
 ## How to use
 
 Clone the project:
