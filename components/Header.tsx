@@ -1,6 +1,12 @@
-import { Flex, Heading, Link } from "@chakra-ui/layout";
-import NextLink from "next/link";
-import ProgressLine from "./ProgressLine";
+import { Libre_Baskerville } from "next/font/google";
+import Link from "next/link";
+// import ProgressLine from "./ProgressLine";
+
+const libre_baskerville = Libre_Baskerville({
+  weight: ["400", "700"],
+  style: ["normal", "italic"],
+  subsets: ["latin"],
+});
 
 type Props = {
   isLoading: boolean;
@@ -8,26 +14,14 @@ type Props = {
 
 const Header = ({ isLoading }: Props) => {
   return (
-    <Flex
-      as="header"
-      p="4"
-      align="center"
-      justify="center"
-      position="fixed"
-      top="0"
-      left="0"
-      zIndex="banner"
-      w="100%"
-      bg="white"
-      shadow="md"
-    >
-      <Heading as="h1" fontWeight="semibold" fontFamily="libre_baskerville">
-        <Link as={NextLink} href="/page/1" _hover={{ textDecoration: "none" }}>
+    <header className="p-4 text-center fixed top-0 left-0 z-50 w-full bg-white shadow-md">
+      <h1 className={`font-semibold ${libre_baskerville.className}`}>
+        <Link href="/page/1" className="hover:no-underline">
           News App
         </Link>
-      </Heading>
-      {isLoading && <ProgressLine />}
-    </Flex>
+      </h1>
+      {/* {isLoading && <ProgressLine />} */}
+    </header>
   );
 };
 

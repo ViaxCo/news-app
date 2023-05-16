@@ -1,31 +1,19 @@
-import { Flex, Link, Text } from "@chakra-ui/layout";
-
 const Footer = () => {
   return (
-    <Flex
-      as="footer"
-      align="center"
-      justify="center"
-      fontSize="sm"
-      textAlign="center"
-      color="#666"
-      mt="6"
-      p="4"
-    >
-      <Text as="span">
+    <footer className="text-sm text-center text-grey mt-6 p-4">
+      <span>
         Copyright &copy; {new Date().getFullYear()}
-        <Link
+        <a
           href="https://www.viaxco.com"
           target="_blank"
           rel="noopener noreferrer"
-          color="blue.600"
-          mx="1.5"
+          className="text-blue-600 mx-1.5 hover:underline"
         >
           ViaxCo.
-        </Link>
+        </a>
         All Rights Reserved
-      </Text>
-    </Flex>
+      </span>
+    </footer>
   );
 };
 

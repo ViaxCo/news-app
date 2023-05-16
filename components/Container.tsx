@@ -1,7 +1,13 @@
-import { Flex } from "@chakra-ui/layout";
+import { Poppins } from "next/font/google";
 import { ReactNode } from "react";
 import Footer from "./Footer";
 import Header from "./Header";
+
+const poppins = Poppins({
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  style: ["normal", "italic"],
+  subsets: ["latin"],
+});
 
 type Props = {
   children: ReactNode;
@@ -10,13 +16,12 @@ type Props = {
 
 const Container = ({ children, isLoading }: Props) => {
   return (
-    <Flex direction="column" minH="100vh" overflow="hidden">
+    <div className={` flex flex-col min-h-screen overflow-hidden ${poppins.className}`}>
       <Header isLoading={isLoading} />
-      <Flex flex="1" direction="column" p={["2", "4"]} mt="20">
-        {children}
-      </Flex>
+      {/* TODO: Check this `sm`, to possibly change the value to 30em or use md */}
+      <div className="flex flex-1 flex-col p-2 sm:p-4 mt-20">{children}</div>
       <Footer />
-    </Flex>
+    </div>
   );
 };
 

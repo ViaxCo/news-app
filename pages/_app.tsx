@@ -1,7 +1,6 @@
 import Container from "@/components/Container";
 import Meta from "@/components/Meta";
-import theme from "@/theme";
-import { ChakraProvider } from "@chakra-ui/react";
+import "@/styles/globals.css";
 // Remove blue outline from buttons and links
 import "focus-visible/dist/focus-visible";
 import type { AppProps } from "next/app";
@@ -25,15 +24,14 @@ const App = ({ Component, pageProps }: AppProps) => {
       Router.events.off("routeChangeError", end);
     };
   }, []);
+
   return (
     <>
       <Meta id="home" />
 
-      <ChakraProvider theme={theme}>
-        <Container isLoading={isLoading}>
-          <Component {...pageProps} />
-        </Container>
-      </ChakraProvider>
+      <Container isLoading={isLoading}>
+        <Component {...pageProps} />
+      </Container>
     </>
   );
 };
