@@ -18,7 +18,6 @@ const Container = ({ children, isLoading }: Props) => {
   return (
     <div className={` flex flex-col min-h-screen overflow-hidden ${poppins.className}`}>
       <Header isLoading={isLoading} />
-      {/* TODO: Check this `sm`, to possibly change the value to 30em or use md */}
       <div className="flex flex-1 flex-col p-2 sm:p-4 mt-20">{children}</div>
       <Footer />
     </div>
