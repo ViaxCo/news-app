@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@plaiceholder/next": "^2.5.0",
+    "@rmwc/linear-progress": "^8.0.7",
     "@types/node": "18.16.3",
     "@types/react": "18.2.4",
     "@types/react-dom": "18.2.3",

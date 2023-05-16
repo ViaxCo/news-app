@@ -1,6 +1,6 @@
 import { Libre_Baskerville } from "next/font/google";
 import Link from "next/link";
-// import ProgressLine from "./ProgressLine";
+import ProgressLine from "./ProgressLine";
 
 const libre_baskerville = Libre_Baskerville({
   weight: ["400", "700"],
@@ -20,7 +20,7 @@ const Header = ({ isLoading }: Props) => {
           News App
         </Link>
       </h1>
-      {/* {isLoading && <ProgressLine />} */}
+      {isLoading && <ProgressLine />}
     </header>
   );
 };
