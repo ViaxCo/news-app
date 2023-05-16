@@ -1,7 +1,6 @@
 import { Article, ArticleFromApi } from "@/components/ArticleCard";
 import Articles from "@/components/Articles";
 import Pagination from "@/components/Pagination";
-import { Flex, Heading, Text } from "@chakra-ui/layout";
 import axios from "axios";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { useRouter } from "next/router";
@@ -18,18 +17,15 @@ const Page = ({ articles }: Props) => {
   const { page } = query;
 
   return (
-    <Flex direction="column" flex={1}>
-      <Flex borderBottom="2px solid black" align="center" justify="space-between">
-        <Heading ml="2" fontSize={["2xl", "3xl"]} fontWeight="semibold">
-          Articles
-        </Heading>
-        <Text mr="2" fontSize="small" color="#666">
-          Page {page}
-        </Text>
-      </Flex>
+    <div className="flex flex-col flex-1">
+      <div className="border-b-2 border-solid border-black flex items-center justify-between">
+        {/* TODO: Check this `sm`, to possibly change the value to 30em or use md */}
+        <h2 className="ml-2 text-2xl sm:text-3xl font-semibold">Articles</h2>
+        <p className="mr-2 text-sm text-grey">Page {page}</p>
+      </div>
       <Articles articles={articles} />
       <Pagination currentPage={+page!} totalPages={totalPages} />
-    </Flex>
+    </div>
   );
 };
 

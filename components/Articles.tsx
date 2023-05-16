@@ -1,4 +1,3 @@
-import { Grid } from "@chakra-ui/layout";
 import type { Article } from "./ArticleCard";
 import ArticleCard from "./ArticleCard";
 
@@ -8,17 +7,11 @@ type Props = {
 
 const Articles = ({ articles }: Props) => {
   return (
-    <Grid
-      templateColumns="repeat(auto-fit, minmax(300px, 1fr))"
-      placeItems="center"
-      placeContent="center"
-      gap="4"
-      mt="4"
-    >
+    <div className="grid grid-cols-articles place-items-center place-content-center gap-4 mt-4">
       {articles.map((article, index) => (
         <ArticleCard key={article.id} article={article} index={index} />
       ))}
-    </Grid>
+    </div>
   );
 };
 

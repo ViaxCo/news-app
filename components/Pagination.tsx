@@ -1,52 +1,63 @@
-import { Button, ButtonProps } from "@chakra-ui/button";
-import { HStack, Text } from "@chakra-ui/layout";
-import { Link } from "@chakra-ui/react";
-import { chakra } from "@chakra-ui/system";
-import NextLink from "next/link";
-import { ReactNode } from "react";
+import Link from "next/link";
+import type { ButtonHTMLAttributes, ReactNode } from "react";
+
+type PaginationButtonProps = {
+  children: ReactNode;
+  page: number;
+  className?: string;
+} & ButtonHTMLAttributes<HTMLButtonElement>;
+
+const PaginationButton = ({
+  children,
+  page,
+  className,
+  ...props
+}: PaginationButtonProps) => (
+  <Link href={`/page/${page}`} className="hover:no-underline">
+    <button
+      className={`font-bold text-lg btn btn-blue disabled:opacity-40 disabled:cursor-not-allowed ${
+        className ?? ""
+      }`}
+      {...props}
+    >
+      {children}
+    </button>
+  </Link>
+);
 
 type Props = {
   currentPage: number;
   totalPages: number;
 };
 
-// Custom span component with chakra props
-const Span = chakra("span");
-
-type PaginationButtonProps = { children: ReactNode; page: number } & ButtonProps;
-
-const PaginationButton = ({ children, page, ...props }: PaginationButtonProps) => (
-  <Link as={NextLink} href={`/page/${page}`} _hover={{ textDecoration: "none" }}>
-    <Button size="sm" fontWeight="bold" fontSize="lg" colorScheme="blue" {...props}>
-      {children}
-    </Button>
-  </Link>
-);
-
 const Pagination = ({ currentPage, totalPages }: Props) => {
   return (
-    <HStack alignSelf="center" mt="6" spacing="4">
+    <div className="flex items-center self-center mt-6 space-x-4">
       {/* Beginning */}
-      <PaginationButton page={1} isDisabled={currentPage === 1} px="2">
+      <PaginationButton page={1} disabled={currentPage === 1} className="px-2">
         &lt;&lt;
       </PaginationButton>
       {/* Previous */}
-      <PaginationButton page={currentPage - 1} isDisabled={currentPage === 1}>
+      <PaginationButton page={currentPage - 1} disabled={currentPage === 1}>
         &lt;
       </PaginationButton>
-      <Text>
-        Page <Span fontWeight="semibold">{currentPage}</Span> of{" "}
-        <Span fontWeight="semibold">{totalPages ? totalPages : 1}</Span>
-      </Text>
+      <p>
+        Page <span className="font-semibold">{currentPage}</span> of{" "}
+        <span className="font-semibold">{totalPages ? totalPages : 1}</span>
+      </p>
       {/* Next */}
-      <PaginationButton page={currentPage + 1} isDisabled={currentPage === totalPages}>
+      <PaginationButton page={currentPage + 1} disabled={currentPage === totalPages}>
         &gt;
       </PaginationButton>
       {/* End */}
-      <PaginationButton page={totalPages} isDisabled={currentPage === totalPages} px="2">
+      <PaginationButton
+        page={totalPages}
+        disabled={currentPage === totalPages}
+        className="px-2"
+      >
         &gt;&gt;
       </PaginationButton>
-    </HStack>
+    </div>
   );
 };
 

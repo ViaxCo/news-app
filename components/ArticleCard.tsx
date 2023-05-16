@@ -1,4 +1,3 @@
-import { Box, Flex, LinkBox, LinkOverlay, Text } from "@chakra-ui/layout";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -51,25 +50,9 @@ const ArticleCard = ({ article, index }: Props) => {
   }, []);
 
   return (
-    <LinkBox
-      as="article"
-      display="flex"
-      flexDirection="column"
-      h="350px"
-      w="100%"
-      maxW="340px"
-      overflow="hidden"
-      mb="8"
-      rounded="md"
-      shadow="md"
-      _hover={{
-        ".title": {
-          color: "blue.600",
-        },
-      }}
-    >
+    <article className="group relative flex flex-col h-[350px] w-full max-w-[340px] overflow-hidden mb-8 rounded-md shadow-md">
       {/* Image */}
-      <Box w="100%" h="200px" overflow={"hidden"} position="relative">
+      <div className="w-full h-[200px] overflow-hidden relative">
         <ImageWithFallback
           src={`https://res.cloudinary.com/viaxco/image/fetch/${encodeURIComponent(
             article.image.src
@@ -82,30 +65,30 @@ const ArticleCard = ({ article, index }: Props) => {
           placeholder="blur"
           blurDataURL={article.image.base64}
         />
-      </Box>
+      </div>
 
-      <Flex p="3" direction="column" flex="1">
+      <div className="flex p-3 flex-col flex-1">
         {/* Title */}
-        <Flex flex="1" align="center">
-          <Text fontWeight="semibold">
-            <LinkOverlay
-              className="title"
+        <div className="flex flex-1 items-center">
+          <p className="font-semibold">
+            <a
               href={article.url}
               target="_blank"
               rel="noopener noreferrer"
+              className="group-hover:text-blue-600 title"
             >
               {article.title}
-            </LinkOverlay>
-          </Text>
-        </Flex>
+            </a>
+          </p>
+        </div>
 
         {/* Time */}
-        <Flex align="center" fontSize="sm" color="#666" mt="1">
-          <Box as={TimeIcon} mr="1" />
-          <Text mt="0.5">{dateFromNow}</Text>
-        </Flex>
-      </Flex>
-    </LinkBox>
+        <div className="flex items-center text-sm text-grey mt-1">
+          <TimeIcon className="mr-1" />
+          <p className="mt-0.5">{dateFromNow}</p>
+        </div>
+      </div>
+    </article>
   );
 };
 
