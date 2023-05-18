@@ -9,7 +9,7 @@ const libre_baskerville = Libre_Baskerville({
 });
 
 type Props = {
-  isLoading: boolean;
+  isLoading?: boolean;
 };
 
 const Header = ({ isLoading }: Props) => {
