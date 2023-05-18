@@ -3,7 +3,6 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
 import timezone from "dayjs/plugin/timezone"; // dependent on utc plugin
 import utc from "dayjs/plugin/utc";
-import { useEffect, useState } from "react";
 import { IoMdTime as TimeIcon } from "react-icons/io";
 import ImageWithFallback from "./ImageWithFallback";
 
@@ -38,16 +37,17 @@ dayjs.extend(timezone);
 dayjs.tz.setDefault("Africa/Lagos");
 
 const ArticleCard = ({ article, index }: Props) => {
-  const publishedDate = dayjs(article.published, "YYYY-MM-DD HH:mm:ss ZZ").tz();
-  // Render static date on the server
-  const [dateFromNow, setDateFromNow] = useState(
-    publishedDate.format("DD/MM/YYYY - HH:mm")
-  );
+  const dateFromNow = dayjs(article.published, "YYYY-MM-DD HH:mm:ss ZZ").tz().fromNow();
+  // const publishedDate = dayjs(article.published, "YYYY-MM-DD HH:mm:ss ZZ").tz();
+  // // Render static date on the server
+  // const [dateFromNow, setDateFromNow] = useState(
+  //   publishedDate.format("DD/MM/YYYY - HH:mm")
+  // );
 
-  // When on client, update the relative time to the correct time based on the client's time
-  useEffect(() => {
-    setDateFromNow(publishedDate.fromNow());
-  }, []);
+  // // When on client, update the relative time to the correct time based on the client's time
+  // useEffect(() => {
+  //   setDateFromNow(publishedDate.fromNow());
+  // }, []);
 
   return (
     <article className="group relative flex flex-col h-[350px] w-full max-w-[340px] overflow-hidden mb-8 rounded-md shadow-md">
