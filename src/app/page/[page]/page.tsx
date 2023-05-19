@@ -1,7 +1,7 @@
-import type { Article, ArticleFromApi } from "@/components/ArticleCard";
+import type { Article } from "@/components/ArticleCard";
 import Articles from "@/components/Articles";
 import Pagination from "@/components/Pagination";
-import path from "path";
+import type { IGetPlaiceholderReturn } from "plaiceholder";
 import { getPlaiceholder } from "plaiceholder";
 
 const totalPages = 25;
@@ -22,58 +22,37 @@ const getArticles = async (page: string) => {
       { next: { revalidate: 10800 } }
     );
     const data = await res.json();
-    const articles = data.news as ArticleFromApi[];
+    const articles = data.news as Article[];
+
+    // base64 placeholder of the fallback image in /public
+    const fallbackBase64 =
+      "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAIAAAAmkwkpAAAACXBIWXMAAAsTAAALEwEAmpwYAAAANElEQVR4nB3BoREAMAgDQAwDMAtTMWh8ND4+HtO7/gcAfwDCdlVl5t2FpJnpbttBcnclkXxmJSGykN3v2wAAAABJRU5ErkJggg==";
 
     // Transform images to use a placeholder image
-    const imagesProps = await Promise.all(
-      articles.map(async article => {
-        try {
-          const { base64 } = await getPlaiceholder(
-            article.image === "None" ? "/fallback.jpg" : article.image,
-            {
-              // Use path.resolve to allow the serverless function include the contents of the public folder
-              dir: path.resolve(process.cwd() + "/public"),
-            }
-          );
-          return {
-            src: article.image,
-            base64,
-          };
-        } catch (error) {
-          console.error({
-            error,
-            image: article.image,
-            title: article.title,
-            page,
-            type: "getPlaiceholder error",
-          });
-          try {
-            // Incase plaiceholder fails to transform the image, return the placeholder based on the fallback image
-            const { base64 } = await getPlaiceholder("/fallback.jpg", {
-              // Use path.resolve to allow the serverless function include the contents of the public folder
-              dir: path.resolve(process.cwd() + "/public"),
-            });
-            return {
-              src: article.image,
-              base64,
-            };
-          } catch (error) {
-            console.error({ error, type: "getPlaiceholder fallback error" });
-            return {
-              src: article.image,
-              base64: "",
-            };
-          }
-        }
-      })
+    const imagesProps = await Promise.allSettled(
+      articles.map(article =>
+        // Return the placholder promise if it resolves within 5 seconds, if not reject
+        Promise.race([getPlaiceholder(article.image), rejectPromiseAfterDelay(5000)])
+      )
     );
 
-    const updatedArticles: Article[] = articles.map((article, index) => ({
-      ...article,
-      image: imagesProps[index],
-    }));
+    const articlesWithPlaceholder: Article[] = articles.map((article, index) => {
+      const item = imagesProps[index];
+      if (item.status === "fulfilled") {
+        return { ...article, base64: item.value.base64 };
+      } else {
+        console.log({
+          error: item.reason,
+          title: article.title,
+          image: article.image,
+          type: "getPlaiceholder error",
+          page,
+        });
+        return { ...article, base64: fallbackBase64 };
+      }
+    });
 
-    return updatedArticles;
+    return articlesWithPlaceholder;
   } catch (error) {
     // TODO: Test the error by modifying any of the above `await's`
     console.error({ error, type: "Either fetch or Promise.all failed" });
@@ -102,3 +81,8 @@ const Page = async ({ params }: Props) => {
 };
 
 export default Page;
+
+const rejectPromiseAfterDelay = (ms: number) =>
+  new Promise<IGetPlaiceholderReturn>((_, reject) => {
+    setTimeout(reject, ms, new Error("timeout"));
+  });

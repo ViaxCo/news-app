@@ -6,12 +6,7 @@ import utc from "dayjs/plugin/utc";
 import { IoMdTime as TimeIcon } from "react-icons/io";
 import ImageWithFallback from "./ImageWithFallback";
 
-type ImageProps = {
-  base64: string;
-  src: string;
-};
-
-export type ArticleFromApi = {
+export type Article = {
   id: string;
   title: string;
   description: string;
@@ -19,10 +14,7 @@ export type ArticleFromApi = {
   author: string;
   image: string;
   published: string;
-};
-
-export type Article = Omit<ArticleFromApi, "image"> & {
-  image: ImageProps;
+  base64?: string;
 };
 
 type Props = {
@@ -45,7 +37,7 @@ const ArticleCard = ({ article, index }: Props) => {
       <div className="w-full h-[200px] overflow-hidden relative">
         <ImageWithFallback
           src={`https://res.cloudinary.com/viaxco/image/fetch/${encodeURIComponent(
-            article.image.src
+            article.image
           )}`}
           alt={article.title}
           width={340}
@@ -53,7 +45,7 @@ const ArticleCard = ({ article, index }: Props) => {
           style={{ objectFit: "contain", objectPosition: "center top" }}
           priority={index === 0 || index === 1}
           placeholder="blur"
-          blurDataURL={article.image.base64}
+          blurDataURL={article.base64}
         />
       </div>
 
