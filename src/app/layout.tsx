@@ -4,6 +4,7 @@ import "@/styles/globals.css";
 import { Poppins } from "next/font/google";
 // Remove blue outline from buttons and links
 import "focus-visible/dist/focus-visible";
+import NextTopLoader from "nextjs-toploader";
 
 const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -42,9 +43,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={poppins.className}>
+        <NextTopLoader
+          height={4}
+          showSpinner={false}
+          color="#3182ce"
+          shadow="0 0 10px #3182ce,0 0 5px #3182ce"
+        />
         <div className={"flex flex-col min-h-screen overflow-hidden"}>
-          {/* TODO: Do something about the loading progress bar */}
-          {/* <Header isLoading={isLoading} /> */}
           <Header />
           <div className="flex flex-1 flex-col p-2 sm:p-4 mt-20">{children}</div>
           <Footer />

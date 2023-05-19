@@ -33,8 +33,4 @@
   .title::before {
     @apply content-[''] cursor-[inherit] block absolute top-0 left-0 z-0 w-full h-full;
   }
-  /* Progress Bar */
-  .progress .mdc-linear-progress__bar-inner {
-    @apply border-blue-500;
-  }
 }

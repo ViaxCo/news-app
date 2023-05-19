@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@plaiceholder/next": "^2.5.0",
-    "@rmwc/linear-progress": "^8.0.7",
     "@types/node": "20.2.0",
     "@types/react": "18.2.6",
     "@types/react-dom": "18.2.4",
@@ -20,6 +19,7 @@
     "eslint-config-next": "^13.4.2",
     "focus-visible": "^5.2.0",
     "next": "^13.4.2",
+    "nextjs-toploader": "^1.4.2",
     "plaiceholder": "^2.5.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
