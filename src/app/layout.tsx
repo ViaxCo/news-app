@@ -22,8 +22,6 @@ export const metadata = {
   openGraph: {
     title,
     description,
-    // TODO: Check if the URL renders correctly in dev and prod
-    // url: "https://viaxco-news-app.vercel.app",
     url: "/",
     images: [
       {
