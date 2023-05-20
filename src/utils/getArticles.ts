@@ -43,8 +43,7 @@ export default async function getArticles(page: string) {
 
     return articlesWithPlaceholder;
   } catch (error) {
-    // TODO: Test the error by modifying any of the above `await's`
-    console.error({ error, type: "Either fetch or Promise.all failed" });
+    console.error({ error, type: "API call failed" });
     return [];
   }
 }
