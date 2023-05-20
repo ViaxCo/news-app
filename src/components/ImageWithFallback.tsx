@@ -1,6 +1,6 @@
 "use client";
 import Image, { ImageProps } from "next/image";
-import { SyntheticEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import fallbackImage from "../../public/fallback.jpg";
 
 interface ImageWithFallbackProps extends ImageProps {
@@ -13,9 +13,10 @@ const ImageWithFallback = ({
   src,
   ...props
 }: ImageWithFallbackProps) => {
-  const [error, setError] = useState<SyntheticEvent<HTMLImageElement, Event> | null>(
-    null
-  );
+  const [error, setError] = useState<React.SyntheticEvent<
+    HTMLImageElement,
+    Event
+  > | null>(null);
 
   useEffect(() => {
     setError(null);

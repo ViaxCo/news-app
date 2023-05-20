@@ -1,11 +1,10 @@
 import Link from "next/link";
-import type { ButtonHTMLAttributes, ReactNode } from "react";
 
 type PaginationButtonProps = {
-  children: ReactNode;
+  children: React.ReactNode;
   page: number;
   className?: string;
-} & ButtonHTMLAttributes<HTMLButtonElement>;
+} & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 const PaginationButton = ({
   children,
